@@ -165,6 +165,7 @@ end})
 
 if (SERVER) then
     util.AddNetworkString("TRTDEffectCountdown")
+    util.AddNetworkString("TRTDEffectCountdownStop")
 end
 
 --[[
@@ -180,7 +181,7 @@ if (CLIENT) then
         local x, y = ScrW() * 0.5, ScrH() * 0.25
         local align = TEXT_ALIGN_CENTER
 
-        timer.Create("TRTDEffectCountdownTimer", delay, seconds, function()
+        timer.Create("TRTDEffectCountdown", delay, seconds, function()
             hook.Add("HUDPaint", "TRTDScreenCountdownPaint", function()
                 draw.DrawText(seconds, font, x, y, color, align)
             end)
@@ -193,6 +194,12 @@ if (CLIENT) then
         end)
     end
     net.Receive("TRTDEffectCountdown", TRTDEffectCountdown)
+
+    local function TRTDEffectCountdownStop()
+        timer.Remove("TRTDEffectCountdown")
+        hook.Remove("HUDPaint", "TRTDScreenCountdownPaint")
+    end
+    net.Receive("TRTDEffectCountdownStop", TRTDEffectCountdownStop)
 end
 
 --[[
@@ -225,12 +232,25 @@ function ulx.rtd(calling_ply)
     effect.enable(calling_ply)
 
     if (effect.disable ~= nil && effect.duration ~= nil) then
+        -- Trigger the client-side countdown
         net.Start("TRTDEffectCountdown")
         net.WriteInt(effect.duration, 6) -- Bit count of 6 allows any int between 0 and 63
         net.Send(calling_ply)
 
+        -- If the player dies during an effect, we want to stop it as well as the countdown
+        hook.Add("PlayerDeath", "TRTDEffectDisable", function(victim)
+            if (victim == calling_ply) then
+                net.Start("TRTDEffectCountdownStop")
+                net.Send(calling_ply)
+                effect.disable(calling_ply)
+            end
+        end)
+
+        -- Disable the effect
         timer.Simple(effect.duration, function()
-            if (IsValid(calling_ply)) then effect.disable(calling_ply) end
+            if (!IsValid(calling_ply)) then return end
+            effect.disable(calling_ply)
+            hook.Remove("PlayerDeath", "TRTDEffectDisable")
         end)
     end
 
