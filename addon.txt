@@ -1,0 +1,8 @@
+"AddonInfo" {
+    "name"         "Roll The Dice"
+    "version"      "1.0"
+    "up_date"      "02/21/2015"
+    "author_name"  "Timmy"
+    "author_email" "Killua13@users.noreply.github.com"
+    "info"         "Allows players to *Roll the Dice* by typing rtd in chat. Rolling the dice will give players a random and temporary effect."
+}
