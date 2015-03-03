@@ -265,7 +265,13 @@ function ulx.rtd(calling_ply)
     table.insert(notification, effect.name)
     table.insert(notification, TRTD.Colors.Default)
     table.insert(notification, " from the dice.")
-    ULib.tsayColor((TRTD.Settings.Notifications:GetBool() == 1 and nil or calling_ply), false, unpack(notification))
+
+    local effectNotifications = nil -- nil will send to all players
+    if (TRTD.Settings.Notifications:GetBool() == false) then
+        effectNotifications = calling_ply
+    end
+
+    ULib.tsayColor(effectNotifications, false, unpack(notification))
 end
 local rtd = ulx.command(TRTD.Settings.Category:GetString(), "ulx rtd", ulx.rtd, "rtd", true)
 rtd:defaultAccess(ULib.ACCESS_ALL)
