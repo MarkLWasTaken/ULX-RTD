@@ -1,24 +1,30 @@
-local version = "v1.0"
+local version = "v1.1"
 local version_url = "http://users.silenceisdefeat.com/timmy/gmod/trtd.txt"
 local update_url = "github.com/Killua13/ULX-RTD"
-
-local messages = {}
-messages.outdated = "[RTD] A newer version is available. Update me here: " .. update_url;
-messages.updated  = "[RTD] Running the latest version."
-messages.error    = "[RTD] Checking for updates failed."
+local msg_outdated = "[RTD] Newer version available! Download here: " .. update_url
 
 hook.Add("PlayerInitialSpawn", "TRTDVersionCheck", function(ply)
-    http.Fetch(version_url, function(body, len, headers, code)
-        if (string.Trim(body) ~= version) then
-            MsgN(messages.outdated)
+    if (ply:IsSuperAdmin() ~= true) then return end
 
-            if (ply:IsAdmin() or ply:IsSuperAdmin()) then
-                ply:PrintMessage(HUD_PRINTTALK, messages.outdated)
+    local notification_count = tonumber(ply:GetPData("trtd_outdated_" .. version, 5))
+    if (notification_count == -1) then return end
+
+    http.Fetch(version_url, function(body, len, headers, code)
+
+        if (string.Trim(body) ~= version) then
+            notification_count = notification_count - 1
+            ply:SetPData("trtd_outdated_" .. version, notification_count)
+
+            if (notification_count > 0) then
+                ply:PrintMessage(HUD_PRINTTALK, msg_outdated .. " - Will display " .. notification_count .. " more time(s).")
+            else
+                ply:PrintMessage(HUD_PRINTTALK, msg_outdated)
             end
-        else
-            MsgN(messages.updated)
         end
+
     end, function(error)
-        MsgN(messages.error)
+
+        -- Silently fail
+
     end)
 end)
