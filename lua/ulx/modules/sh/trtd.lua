@@ -48,6 +48,15 @@ TRTD.Settings.Cooldown = CreateConVar("trtd_cooldown", TRTD.Settings.Cooldown, {
 TRTD.Settings.Notifications = CreateConVar("trtd_notifications", TRTD.Settings.Notifications, {FCVAR_DEMO, FCVAR_GAMEDLL, FCVAR_SERVER_CAN_EXECUTE}, "Broadcast notification to all players when a player rolls the dice")
 
 --[[
+    Define network strings
+--]]
+
+if (SERVER) then
+    util.AddNetworkString("TRTD_EffectCountdown")
+    util.AddNetworkString("TRTD_EffectCountdownStop")
+end
+
+--[[
     Add effects to the dice
     Some effects are not automatically disabled. They don't have a duration or disable function.
 --]]
@@ -161,15 +170,6 @@ TRTD.AddEffect({name="spontaneous combustion", duration=15, enable=function(ply)
 end, disable=function(ply)
     ply:Extinguish()
 end})
-
---[[
-    Define network strings
---]]
-
-if (SERVER) then
-    util.AddNetworkString("TRTD_EffectCountdown")
-    util.AddNetworkString("TRTD_EffectCountdownStop")
-end
 
 --[[
     Client-side effect countdown
