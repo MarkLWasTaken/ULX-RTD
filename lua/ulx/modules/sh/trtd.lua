@@ -54,6 +54,7 @@ TRTD.Settings.Notifications = CreateConVar("trtd_notifications", TRTD.Settings.N
 if (SERVER) then
     util.AddNetworkString("TRTD_EffectCountdown")
     util.AddNetworkString("TRTD_EffectCountdownStop")
+    util.AddNetworkString("TRTD_DruggedEffect")
 end
 
 --[[
@@ -114,6 +115,14 @@ end, disable=function(ply)
     umsg.Bool(false)
     umsg.Short(200)
     umsg.End()
+end})
+
+TRTD.AddEffect({name="drugged", duration=20, enable=function(ply)
+    net.Start("TRTD_DruggedEffect")
+    net.Send(ply)
+end, disable=function(ply)
+    net.Start("TRTD_DruggedEffect")
+    net.Send(ply)
 end})
 
 TRTD.AddEffect({name="earthquake", duration=5, enable=function(ply)
