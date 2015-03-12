@@ -167,8 +167,8 @@ end})
 --]]
 
 if (SERVER) then
-    util.AddNetworkString("TRTDEffectCountdown")
-    util.AddNetworkString("TRTDEffectCountdownStop")
+    util.AddNetworkString("TRTD_EffectCountdown")
+    util.AddNetworkString("TRTD_EffectCountdownStop")
 end
 
 --[[
@@ -176,7 +176,7 @@ end
 --]]
 
 if (CLIENT) then
-    local function TRTDEffectCountdown()
+    local function TRTD_EffectCountdown()
         local delay = 1
         local seconds = net.ReadInt(6)
         local font = "DermaLarge"
@@ -184,25 +184,25 @@ if (CLIENT) then
         local x, y = ScrW() * 0.5, ScrH() * 0.25
         local align = TEXT_ALIGN_CENTER
 
-        timer.Create("TRTDEffectCountdown", delay, seconds, function()
-            hook.Add("HUDPaint", "TRTDScreenCountdownPaint", function()
+        timer.Create("TRTD_Countdown", delay, seconds, function()
+            hook.Add("HUDPaint", "TRTD_Countdown", function()
                 draw.DrawText(seconds, font, x, y, color, align)
             end)
 
             seconds = seconds - 1
 
             if (seconds < 1) then
-                hook.Remove("HUDPaint", "TRTDScreenCountdownPaint")
+                hook.Remove("HUDPaint", "TRTD_Countdown")
             end
         end)
     end
-    net.Receive("TRTDEffectCountdown", TRTDEffectCountdown)
+    net.Receive("TRTD_EffectCountdown", TRTD_EffectCountdown)
 
-    local function TRTDEffectCountdownStop()
-        timer.Remove("TRTDEffectCountdown")
-        hook.Remove("HUDPaint", "TRTDScreenCountdownPaint")
+    local function TRTD_EffectCountdownStop()
+        timer.Remove("TRTD_Countdown")
+        hook.Remove("HUDPaint", "TRTD_Countdown")
     end
-    net.Receive("TRTDEffectCountdownStop", TRTDEffectCountdownStop)
+    net.Receive("TRTD_EffectCountdownStop", TRTD_EffectCountdownStop)
 end
 
 --[[
@@ -212,12 +212,12 @@ end
 function ulx.rtd(calling_ply)
     if (!IsValid(calling_ply)) then return end
 
-    if (calling_ply.TRTDCooldown == nil) then
-        calling_ply.TRTDCooldown = 0
+    if (calling_ply.TRTD_Cooldown == nil) then
+        calling_ply.TRTD_Cooldown = 0
     end
 
-    if (calling_ply.TRTDCooldown-1 > CurTime()) then
-        ULib.tsayError(calling_ply, "You have to wait " .. math.Round(calling_ply.TRTDCooldown - CurTime()) .. " more seconds before you can Roll the Dice again.")
+    if (calling_ply.TRTD_Cooldown-1 > CurTime()) then
+        ULib.tsayError(calling_ply, "You have to wait " .. math.Round(calling_ply.TRTD_Cooldown - CurTime()) .. " more seconds before you can Roll the Dice again.")
         return
     end
 
@@ -226,7 +226,7 @@ function ulx.rtd(calling_ply)
         return
     end
 
-    calling_ply.TRTDCooldown = CurTime() + TRTD.Settings.Cooldown:GetInt()
+    calling_ply.TRTD_Cooldown = CurTime() + TRTD.Settings.Cooldown:GetInt()
 
     local effect = TRTD.Effects[math.random(1, #TRTD.Effects)]
 
@@ -236,14 +236,14 @@ function ulx.rtd(calling_ply)
 
     if (effect.disable ~= nil && effect.duration ~= nil) then
         -- Trigger the client-side countdown
-        net.Start("TRTDEffectCountdown")
+        net.Start("TRTD_EffectCountdown")
         net.WriteInt(effect.duration, 6) -- Bit count of 6 allows any int between 0 and 63
         net.Send(calling_ply)
 
         -- If the player dies during an effect, we want to stop it as well as the countdown
-        hook.Add("PlayerDeath", "TRTDEffectDisable", function(victim)
+        hook.Add("PlayerDeath", "TRTD_EffectDisable", function(victim)
             if (victim == calling_ply) then
-                net.Start("TRTDEffectCountdownStop")
+                net.Start("TRTD_EffectCountdownStop")
                 net.Send(calling_ply)
                 effect.disable(calling_ply)
             end
@@ -253,7 +253,7 @@ function ulx.rtd(calling_ply)
         timer.Simple(effect.duration, function()
             if (!IsValid(calling_ply)) then return end
             effect.disable(calling_ply)
-            hook.Remove("PlayerDeath", "TRTDEffectDisable")
+            hook.Remove("PlayerDeath", "TRTD_EffectDisable")
         end)
     end
 
