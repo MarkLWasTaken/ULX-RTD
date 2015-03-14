@@ -93,6 +93,13 @@ end, disable=function(ply)
     ply:SetGravity(1)
 end})
 
+TRTD.AddEffect({name="noclip", duration=20, enable=function(ply)
+    ply:SetMoveType(MOVETYPE_NOCLIP)
+end, disable=function(ply)
+    ply:SetMoveType(MOVETYPE_WALK)
+    ply:UnTrap()
+end})
+
 TRTD.AddEffect({name="tiny player", duration=15, enable=function(ply)
     ply.modelscale = ply:GetModelScale()
     ply.viewoffset = ply:GetViewOffset()
