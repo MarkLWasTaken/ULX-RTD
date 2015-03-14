@@ -8,7 +8,7 @@ local redOperator = "+"
 local greenOperator = "-"
 local blueOperator = "+"
 
-local increment = 0.006
+local increment = 0.007
 
 local function flashColors()
 
