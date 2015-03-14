@@ -8,6 +8,7 @@ This module adds the ability for players to "Roll the Dice". Players will receiv
 * godmode
 * invisibility
 * low gravity
+* noclip
 * tiny player
 
 **Bad effects**
