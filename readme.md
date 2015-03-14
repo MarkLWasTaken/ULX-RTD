@@ -12,6 +12,8 @@ This module adds the ability for players to "Roll the Dice". Players will receiv
 
 **Bad effects**
 * blindness
+* confusion
+* drugged
 * earthquake
 * reduced speed
 * rocket
