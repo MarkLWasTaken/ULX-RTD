@@ -1,3 +1,9 @@
+## 1.2 (14 Mar 2015)
+
+Features:
+
+- New effects: noclip, confused, drugged
+
 ## 1.1 (3 Mar 2015)
 
 Features:
