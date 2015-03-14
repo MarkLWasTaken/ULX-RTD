@@ -55,6 +55,7 @@ if (SERVER) then
     util.AddNetworkString("TRTD_EffectCountdown")
     util.AddNetworkString("TRTD_EffectCountdownStop")
     util.AddNetworkString("TRTD_DruggedEffect")
+    util.AddNetworkString("TRTD_ConfusedEffect")
 end
 
 --[[
@@ -115,6 +116,14 @@ end, disable=function(ply)
     umsg.Bool(false)
     umsg.Short(200)
     umsg.End()
+end})
+
+TRTD.AddEffect({name="confused", duration=15, enable=function(ply)
+    net.Start("TRTD_ConfusedEffect")
+    net.Send(ply)
+end, disable=function(ply)
+    net.Start("TRTD_ConfusedEffect")
+    net.Send(ply)
 end})
 
 TRTD.AddEffect({name="drugged", duration=20, enable=function(ply)
