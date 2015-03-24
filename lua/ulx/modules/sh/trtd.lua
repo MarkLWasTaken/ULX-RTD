@@ -68,11 +68,17 @@ TRTD.AddEffect({name="double health", enable=function(ply)
 end})
 
 TRTD.AddEffect({name="faster speed", duration=20, enable=function(ply)
-    ply:SetWalkSpeed(ply:GetWalkSpeed() * 2)
-    ply:SetRunSpeed(ply:GetRunSpeed() * 2)
+    -- Store initial values only once
+    if (ply.walkspeed == nil) then
+        ply.walkspeed = ply:GetWalkSpeed()
+        ply.runspeed = ply:GetRunSpeed()
+    end
+
+    ply:SetWalkSpeed(ply.walkspeed * 2)
+    ply:SetRunSpeed(ply.runspeed * 2)
 end, disable=function(ply)
-    ply:SetWalkSpeed(ply:GetWalkSpeed() / 2)
-    ply:SetRunSpeed(ply:GetRunSpeed() / 2)
+    ply:SetWalkSpeed(ply.walkspeed)
+    ply:SetRunSpeed(ply.runspeed)
 end})
 
 TRTD.AddEffect({name="godmode", duration=10, enable=function(ply)
@@ -101,9 +107,13 @@ end, disable=function(ply)
 end})
 
 TRTD.AddEffect({name="tiny player", duration=15, enable=function(ply)
-    ply.modelscale = ply:GetModelScale()
-    ply.viewoffset = ply:GetViewOffset()
-    ply.viewoffsetducked = ply:GetViewOffsetDucked()
+    -- Store initial values only once
+    if (ply.modelscale == nil) then
+        ply.modelscale = ply:GetModelScale()
+        ply.viewoffset = ply:GetViewOffset()
+        ply.viewoffsetducked = ply:GetViewOffsetDucked()
+    end
+
     ply:SetModelScale(ply:GetModelScale() * 0.25)
     ply:SetViewOffset(Vector(0, 0, 15))
     ply:SetViewOffsetDucked(Vector(0, 0, 15))
@@ -127,17 +137,21 @@ end})
 
 TRTD.AddEffect({name="confused", duration=15, enable=function(ply)
     net.Start("TRTD_ConfusedEffect")
+    net.WriteBool(true)
     net.Send(ply)
 end, disable=function(ply)
     net.Start("TRTD_ConfusedEffect")
+    net.WriteBool(false)
     net.Send(ply)
 end})
 
 TRTD.AddEffect({name="drugged", duration=20, enable=function(ply)
     net.Start("TRTD_DruggedEffect")
+    net.WriteBool(true)
     net.Send(ply)
 end, disable=function(ply)
     net.Start("TRTD_DruggedEffect")
+    net.WriteBool(false)
     net.Send(ply)
 end})
 
@@ -159,10 +173,14 @@ end, disable=function(ply)
 end})
 
 TRTD.AddEffect({name="reduced speed", duration=15, enable=function(ply)
-    ply.walkspeed = ply:GetWalkSpeed()
-    ply.runspeed = ply:GetRunSpeed()
-    ply:SetWalkSpeed(ply:GetWalkSpeed() * 0.25)
-    ply:SetRunSpeed(ply:GetRunSpeed() * 0.25)
+    -- Store initial values only once
+    if (ply.walkspeed == nil) then
+        ply.walkspeed = ply:GetWalkSpeed()
+        ply.runspeed = ply:GetRunSpeed()
+    end
+
+    ply:SetWalkSpeed(ply.walkspeed * 0.25)
+    ply:SetRunSpeed(ply.runspeed * 0.25)
 end, disable=function(ply)
     ply:SetWalkSpeed(ply.walkspeed)
     ply:SetRunSpeed(ply.runspeed)
@@ -265,20 +283,26 @@ function ulx.rtd(calling_ply)
         net.WriteInt(effect.duration, 6) -- Bit count of 6 allows any int between 0 and 63
         net.Send(calling_ply)
 
+        -- Make sure all hook IDs are unique...
+        local session = util.CRC(SysTime())
+        local hookId = "TRTD_EffectTimer_" .. calling_ply:SteamID64() .. session
+        local timerId = "TRTD_DeathListener_" .. calling_ply:SteamID64() .. session
+
         -- If the player dies during an effect, we want to stop it as well as the countdown
-        hook.Add("PlayerDeath", "TRTD_EffectDisable", function(victim)
+        hook.Add("PlayerDeath", hookId, function(victim)
             if (victim == calling_ply) then
                 net.Start("TRTD_EffectCountdownStop")
                 net.Send(calling_ply)
                 effect.disable(calling_ply)
+                timer.Destroy(timerId)
             end
         end)
 
         -- Disable the effect
-        timer.Simple(effect.duration, function()
+        timer.Create(timerId, effect.duration, 1, function()
             if (!IsValid(calling_ply)) then return end
             effect.disable(calling_ply)
-            hook.Remove("PlayerDeath", "TRTD_EffectDisable")
+            hook.Remove("PlayerDeath", hookId)
         end)
     end
 

@@ -19,16 +19,14 @@ function invertMovement(cmd)
     cmd:SetForwardMove(-forward)
 end
 
-local active = false
 local function TRTD_ConfusedEffect()
-    if (not active) then
+    local enable = net.ReadBool()
+    if (enable) then
         hook.Add("InputMouseApply", "TRTD_invertMouse", invertMouse)
         hook.Add("CreateMove", "TRTD_invertMovement", invertMovement)
     else
         hook.Remove("InputMouseApply", "TRTD_invertMouse", invertMouse)
         hook.Remove("CreateMove", "TRTD_invertMovement", invertMovement)
     end
-
-    active = not active
 end
 net.Receive("TRTD_ConfusedEffect", TRTD_ConfusedEffect)

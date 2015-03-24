@@ -60,16 +60,14 @@ local function swingScreen(ply, pos, angles, fov)
 
 end
 
-local active = false
 local function TRTD_DruggedEffect()
-    if (not active) then
+    local enable = net.ReadBool()
+    if (enable) then
         hook.Add("RenderScreenspaceEffects", "TRTD_FlashColors", flashColors)
         hook.Add("CalcView", "TRTD_SwingScreen", swingScreen)
     else
         hook.Remove("RenderScreenspaceEffects", "TRTD_FlashColors", flashColors)
         hook.Remove("CalcView", "TRTD_SwingScreen", swingScreen)
     end
-
-    active = not active
 end
 net.Receive("TRTD_DruggedEffect", TRTD_DruggedEffect)
