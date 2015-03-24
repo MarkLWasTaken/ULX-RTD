@@ -3,7 +3,7 @@
 Bugfixes:
 
 - Fix effects getting disabled twice
-- Fixed effects giving unexpected results when called before timer ends
+- Fixed effects giving unexpected results when ran simultaneously
 
 ## 1.2.0 (14 Mar 2015)
 
