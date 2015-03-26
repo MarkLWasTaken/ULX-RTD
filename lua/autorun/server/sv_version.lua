@@ -1,4 +1,4 @@
-local version = "v1.2"
+local version = "v1.2.1"
 local version_url = "http://users.silenceisdefeat.com/timmy/gmod/trtd.txt"
 local update_url = "github.com/Killua13/ULX-RTD"
 local msg_outdated = "[RTD] Newer version available! Download here: " .. update_url
