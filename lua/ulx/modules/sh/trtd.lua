@@ -54,8 +54,9 @@ TRTD.Settings.Notifications = CreateConVar("trtd_notifications", TRTD.Settings.N
 if (SERVER) then
     util.AddNetworkString("TRTD_EffectCountdown")
     util.AddNetworkString("TRTD_EffectCountdownStop")
-    util.AddNetworkString("TRTD_DruggedEffect")
     util.AddNetworkString("TRTD_ConfusedEffect")
+    util.AddNetworkString("TRTD_DruggedEffect")
+    util.AddNetworkString("TRTD_EarthquakeEffect")
 end
 
 --[[
@@ -156,20 +157,13 @@ end, disable=function(ply)
 end})
 
 TRTD.AddEffect({name="earthquake", duration=5, enable=function(ply)
-    ply:Freeze(true)
-    local trtdshake = ents.Create("env_shake")
-    trtdshake:SetOwner(ply)
-    trtdshake:SetPos(ply:GetPos())
-    trtdshake:SetKeyValue("amplitude", "16") -- The amount of noise in the screen shake (range 0-16)
-    trtdshake:SetKeyValue("radius", "100") -- The radius around this entity in which to affect players
-    trtdshake:SetKeyValue("frequency", "255") -- The frequency used to apply the screen shake (range 0-255)
-    trtdshake:SetKeyValue("duration", "10") -- Duration for the earthquake is hard coded
-    trtdshake:SetKeyValue("spawnflags", "4")
-    trtdshake:Spawn()
-    trtdshake:Activate()
-    trtdshake:Fire("StartShake")
+    net.Start("TRTD_EarthquakeEffect")
+    net.WriteBool(true)
+    net.Send(ply)
 end, disable=function(ply)
-    ply:Freeze(false)
+    net.Start("TRTD_EarthquakeEffect")
+    net.WriteBool(false)
+    net.Send(ply)
 end})
 
 TRTD.AddEffect({name="reduced speed", duration=15, enable=function(ply)
