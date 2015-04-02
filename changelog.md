@@ -1,3 +1,9 @@
+## 1.3.1 (2 Apr 2015)
+
+Bugfixes:
+
+- Fix invisibility not hiding the players weapon
+
 ## 1.3.0 (2 Apr 2015)
 
 Features:
