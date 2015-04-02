@@ -1,3 +1,14 @@
+## 1.3.0 (2 Apr 2015)
+
+Features:
+
+- Improved "randomness" for the Dice
+
+Bugfixes:
+
+- Fix earthquake effect affecting nearby players
+- Update blindness effect to use gLua's ScreenFade
+
 ## 1.2.1 (24 Mar 2015)
 
 Bugfixes:
