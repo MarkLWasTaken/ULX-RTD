@@ -89,7 +89,7 @@ end, disable=function(ply)
 end})
 
 TRTD.AddEffect({name="invisibility", duration=15, enable=function(ply)
-    ULib.invisible(ply, true, 255)
+    ULib.invisible(ply, true, 0)
 end, disable=function(ply)
     ULib.invisible(ply, false, 255)
 end})
