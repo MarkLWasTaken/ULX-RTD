@@ -237,6 +237,40 @@ if (CLIENT) then
 end
 
 --[[
+    Pick "random" effect for a player
+--]]
+
+function randomEffect(ply)
+    if (ply.history == nil) then
+        ply.history = {}
+    end
+
+    -- Generate random number that's not in the players' history
+    local rand = math.random(1, #TRTD.Effects)
+    while (table.HasValue(ply.history, rand)) do
+        rand = math.random(1, #TRTD.Effects)
+    end
+
+    -- We don't want more than x items in history
+    local keep = math.ceil(#TRTD.Effects * 0.25)
+    if (table.maxn(ply.history) >= keep) then
+        local temp = {}
+        for i=1, keep do
+            if (i == keep) then
+                temp[i] = nil
+            else
+                temp[i] = ply.history[i+1]
+            end
+        end
+        ply.history = temp
+    end
+
+    table.insert(ply.history, rand)
+
+    return TRTD.Effects[rand]
+end
+
+--[[
     Create the ULX command
 --]]
 
@@ -259,7 +293,7 @@ function ulx.rtd(calling_ply)
 
     calling_ply.TRTD_Cooldown = CurTime() + TRTD.Settings.Cooldown:GetInt()
 
-    local effect = TRTD.Effects[math.random(1, #TRTD.Effects)]
+    local effect = randomEffect(calling_ply)
 
     MsgN("[".. TRTD.Settings.Tag:GetString() .."] " .. calling_ply:Nick() .. " has rolled " .. effect.name)
 
