@@ -196,7 +196,7 @@ TRTD.AddEffect({name="reduced health", enable=function(ply)
     ply:SetHealth(1)
 end})
 
-TRTD.AddEffect({name="spontaneous combustion", duration=15, enable=function(ply)
+TRTD.AddEffect({name="spontaneous combustion", duration=10, enable=function(ply)
     ply:Ignite(255)
 end, disable=function(ply)
     ply:Extinguish()
