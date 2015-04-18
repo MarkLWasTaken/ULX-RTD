@@ -1,4 +1,4 @@
-function invertMouse(cmd, x, y, angles)
+local function invertMouse(cmd, x, y, angles)
 
     -- Mouse sensitivity
     local s = 0.02
@@ -12,7 +12,7 @@ function invertMouse(cmd, x, y, angles)
 
 end
 
-function invertMovement(cmd)
+local function invertMovement(cmd)
     local side = cmd:GetSideMove()
     local forward = cmd:GetForwardMove()
     cmd:SetSideMove(-side)
