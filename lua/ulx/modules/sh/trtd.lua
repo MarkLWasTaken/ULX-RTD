@@ -347,6 +347,6 @@ function ulx.rtd(calling_ply)
 
     ULib.tsayColor(effectNotifications, false, unpack(notification))
 end
-local rtd = ulx.command(TRTD.Settings.Category:GetString(), "ulx rtd", ulx.rtd, "rtd", true)
+local rtd = ulx.command(TRTD.Settings.Category:GetString(), "ulx rtd", ulx.rtd, {"!rtd", "rtd"}, true)
 rtd:defaultAccess(ULib.ACCESS_ALL)
 rtd:help("Roll the Dice and receive a random, temporary effect.")
