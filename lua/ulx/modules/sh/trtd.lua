@@ -1,7 +1,7 @@
 --[[
     Addon: Timmy's Roll the Dice module for ULX
     Author: Timmy
-    Contact: timmy[at]timmy[dot]ws
+    Contact: hello[at]timmy[dot]ws
 --]]
 
 --[[
