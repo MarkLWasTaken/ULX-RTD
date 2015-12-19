@@ -202,6 +202,29 @@ end, disable=function(ply)
     ply:Extinguish()
 end}
 
+TRTD.AddEffect{name="nothing", enable=function(ply)
+    -- Do nothing!
+end}
+
+TRTD.AddEffect{name="corporal punishment", enable=function(ply)
+    ULib.slap(ply, math.random(16), math.random(30))
+end}
+
+if engine.ActiveGamemode() == "sandbox" then
+    TRTD.AddEffect{name="increased armor", enable=function(ply)
+        ply:SetArmor(math.Clamp(ply:Armor() + math.random(255), 0, 255))
+    end}
+
+    TRTD.AddEffect{name="reduced armor", enable=function(ply)
+        ply:SetArmor(math.Clamp(ply:Armor() - math.random(255), 0, 255))
+    end}
+end
+
+TRTD.AddEffect{name="respawn", enable=function(ply)
+    ply:Spawn()
+    hook.Call("PlayerLoadout", GAMEMODE, ply)
+end}
+
 --[[
     Client-side effect countdown
 --]]
