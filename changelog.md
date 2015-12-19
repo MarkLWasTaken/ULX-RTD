@@ -1,3 +1,9 @@
+## 1.4.0 (19 Dec 2015)
+
+Features:
+
+- New effects: nothing, corporal punishment, increased/decreased armor, respawn
+
 ## 1.3.1 (2 Apr 2015)
 
 Bugfixes:

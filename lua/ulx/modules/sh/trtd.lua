@@ -229,7 +229,7 @@ end}
     Client-side effect countdown
 --]]
 
-if (CLIENT) then
+if CLIENT then
     local function TRTD_EffectCountdown()
         local delay = 1
         local seconds = net.ReadInt(6)
@@ -245,7 +245,7 @@ if (CLIENT) then
 
             seconds = seconds - 1
 
-            if (seconds < 1) then
+            if seconds < 1 then
                 hook.Remove("HUDPaint", "TRTD_Countdown")
             end
         end)
@@ -264,19 +264,19 @@ end
 --]]
 
 function randomEffect(ply)
-    if (ply.history == nil) then
+    if ply.history == nil then
         ply.history = {}
     end
 
     -- Generate random number that's not in the players' history
     local rand = math.random(1, #TRTD.Effects)
-    while (table.HasValue(ply.history, rand)) do
+    while table.HasValue(ply.history, rand) do
         rand = math.random(1, #TRTD.Effects)
     end
 
     -- We don't want more than x items in history
     local keep = math.ceil(#TRTD.Effects * 0.25)
-    if (table.maxn(ply.history) >= keep) then
+    if table.maxn(ply.history) >= keep then
         local temp = {}
         for i=1, keep do
             if (i == keep) then
@@ -335,7 +335,7 @@ function ulx.rtd(calling_ply)
 
         -- If the player dies during an effect, we want to stop it as well as the countdown
         hook.Add("PlayerDeath", hookId, function(victim)
-            if (victim == calling_ply) then
+            if victim == calling_ply then
                 net.Start("TRTD_EffectCountdownStop")
                 net.Send(calling_ply)
                 effect.disable(calling_ply)
