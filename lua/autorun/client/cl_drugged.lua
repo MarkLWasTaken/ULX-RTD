@@ -11,7 +11,6 @@ local blueOperator = "+"
 local increment = 0.007
 
 local function flashColors()
-
     -- Increase or decrease color values depending on the operator
     if (redOperator == "+") then red = red + increment else red = red - increment end
     if (greenOperator == "+") then green = green + increment else green = red - increment end
@@ -31,13 +30,11 @@ local function flashColors()
     }
 
     DrawColorModify(tab)
-
 end
 
 local swingAngleRoll = 0
 local swingOperator = "+"
 local function swingScreen(ply, pos, angles, fov)
-
     if (swingOperator == "+") then
         swingAngleRoll = swingAngleRoll + 1
     else
@@ -57,12 +54,11 @@ local function swingScreen(ply, pos, angles, fov)
     }
 
     return view
-
 end
 
 local function TRTD_DruggedEffect()
     local enable = net.ReadBool()
-    if (enable) then
+    if enable then
         hook.Add("RenderScreenspaceEffects", "TRTD_FlashColors", flashColors)
         hook.Add("CalcView", "TRTD_SwingScreen", swingScreen)
     else

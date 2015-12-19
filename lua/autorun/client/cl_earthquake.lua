@@ -4,7 +4,7 @@ end
 
 local function TRTD_EarthquakeEffect()
     local enable = net.ReadBool()
-    if (enable) then
+    if enable then
         hook.Add("SetupMove", "TRTD_earthquake", shakePlayer)
     else
         hook.Remove("SetupMove", "TRTD_earthquake", shakePlayer)

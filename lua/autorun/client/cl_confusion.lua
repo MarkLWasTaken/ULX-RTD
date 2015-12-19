@@ -21,7 +21,7 @@ end
 
 local function TRTD_ConfusedEffect()
     local enable = net.ReadBool()
-    if (enable) then
+    if enable then
         hook.Add("InputMouseApply", "TRTD_invertMouse", invertMouse)
         hook.Add("CreateMove", "TRTD_invertMovement", invertMovement)
     else

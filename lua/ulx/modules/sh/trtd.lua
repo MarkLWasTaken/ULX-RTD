@@ -8,7 +8,7 @@
     Namespace module under TRTD
 --]]
 
-TRTD = {} or TRTD
+local TRTD = {} or TRTD
 TRTD.Settings = {} or TRTD.Settings
 TRTD.Colors = {} or TRTD.Colors
 TRTD.Effects = {} or TRTD.Effects
@@ -64,11 +64,11 @@ end
     Some effects are not automatically disabled. They don't have a duration or disable function.
 --]]
 
-TRTD.AddEffect({name="double health", enable=function(ply)
+TRTD.AddEffect{name="double health", enable=function(ply)
     ply:SetHealth(ply:Health() * 2)
-end})
+end}
 
-TRTD.AddEffect({name="faster speed", duration=20, enable=function(ply)
+TRTD.AddEffect{name="faster speed", duration=20, enable=function(ply)
     -- Store initial values only once
     if (ply.walkspeed == nil) then
         ply.walkspeed = ply:GetWalkSpeed()
@@ -80,34 +80,34 @@ TRTD.AddEffect({name="faster speed", duration=20, enable=function(ply)
 end, disable=function(ply)
     ply:SetWalkSpeed(ply.walkspeed)
     ply:SetRunSpeed(ply.runspeed)
-end})
+end}
 
-TRTD.AddEffect({name="godmode", duration=10, enable=function(ply)
+TRTD.AddEffect{name="godmode", duration=10, enable=function(ply)
     ply:GodEnable()
 end, disable=function(ply)
     ply:GodDisable()
-end})
+end}
 
-TRTD.AddEffect({name="invisibility", duration=15, enable=function(ply)
+TRTD.AddEffect{name="invisibility", duration=15, enable=function(ply)
     ULib.invisible(ply, true, 0)
 end, disable=function(ply)
     ULib.invisible(ply, false, 255)
-end})
+end}
 
-TRTD.AddEffect({name="low gravity", duration=15, enable=function(ply)
+TRTD.AddEffect{name="low gravity", duration=15, enable=function(ply)
     ply:SetGravity(0.25)
 end, disable=function(ply)
     ply:SetGravity(1)
-end})
+end}
 
-TRTD.AddEffect({name="noclip", duration=20, enable=function(ply)
+TRTD.AddEffect{name="noclip", duration=20, enable=function(ply)
     ply:SetMoveType(MOVETYPE_NOCLIP)
 end, disable=function(ply)
     ply:SetMoveType(MOVETYPE_WALK)
     ply:UnTrap()
-end})
+end}
 
-TRTD.AddEffect({name="tiny player", duration=15, enable=function(ply)
+TRTD.AddEffect{name="tiny player", duration=15, enable=function(ply)
     -- Store initial values only once
     if (ply.modelscale == nil) then
         ply.modelscale = ply:GetModelScale()
@@ -122,15 +122,15 @@ end, disable=function(ply)
     ply:SetModelScale(ply.modelscale)
     ply:SetViewOffset(ply.viewoffset)
     ply:SetViewOffsetDucked(ply.viewoffsetducked)
-end})
+end}
 
-TRTD.AddEffect({name="blindness", duration=10, enable=function(ply)
+TRTD.AddEffect{name="blindness", duration=10, enable=function(ply)
     ply:ScreenFade(SCREENFADE.STAYOUT, Color(0, 0, 0, 254), 0, 0)
 end, disable=function(ply)
     ply:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 254), 0, 0)
-end})
+end}
 
-TRTD.AddEffect({name="confused", duration=15, enable=function(ply)
+TRTD.AddEffect{name="confused", duration=15, enable=function(ply)
     net.Start("TRTD_ConfusedEffect")
     net.WriteBool(true)
     net.Send(ply)
@@ -138,9 +138,9 @@ end, disable=function(ply)
     net.Start("TRTD_ConfusedEffect")
     net.WriteBool(false)
     net.Send(ply)
-end})
+end}
 
-TRTD.AddEffect({name="drugged", duration=20, enable=function(ply)
+TRTD.AddEffect{name="drugged", duration=20, enable=function(ply)
     net.Start("TRTD_DruggedEffect")
     net.WriteBool(true)
     net.Send(ply)
@@ -148,9 +148,9 @@ end, disable=function(ply)
     net.Start("TRTD_DruggedEffect")
     net.WriteBool(false)
     net.Send(ply)
-end})
+end}
 
-TRTD.AddEffect({name="earthquake", duration=5, enable=function(ply)
+TRTD.AddEffect{name="earthquake", duration=5, enable=function(ply)
     net.Start("TRTD_EarthquakeEffect")
     net.WriteBool(true)
     net.Send(ply)
@@ -158,9 +158,9 @@ end, disable=function(ply)
     net.Start("TRTD_EarthquakeEffect")
     net.WriteBool(false)
     net.Send(ply)
-end})
+end}
 
-TRTD.AddEffect({name="reduced speed", duration=15, enable=function(ply)
+TRTD.AddEffect{name="reduced speed", duration=15, enable=function(ply)
     -- Store initial values only once
     if (ply.walkspeed == nil) then
         ply.walkspeed = ply:GetWalkSpeed()
@@ -172,9 +172,9 @@ TRTD.AddEffect({name="reduced speed", duration=15, enable=function(ply)
 end, disable=function(ply)
     ply:SetWalkSpeed(ply.walkspeed)
     ply:SetRunSpeed(ply.runspeed)
-end})
+end}
 
-TRTD.AddEffect({name="rocket", enable=function(ply)
+TRTD.AddEffect{name="rocket", enable=function(ply)
     local trail = util.SpriteTrail(ply, 0, Color(80, 80, 90), false, 60, 30, 4, 1/(60+30)*0.5, "trails/smoke.vmt")
     ply:SetVelocity(Vector(0, 0, 2048))
     timer.Simple(2.5, function()
@@ -190,17 +190,17 @@ TRTD.AddEffect({name="rocket", enable=function(ply)
             trail:Remove()
         end)
     end)
-end})
+end}
 
-TRTD.AddEffect({name="reduced health", enable=function(ply)
+TRTD.AddEffect{name="reduced health", enable=function(ply)
     ply:SetHealth(1)
-end})
+end}
 
-TRTD.AddEffect({name="spontaneous combustion", duration=10, enable=function(ply)
+TRTD.AddEffect{name="spontaneous combustion", duration=10, enable=function(ply)
     ply:Ignite(255)
 end, disable=function(ply)
     ply:Extinguish()
-end})
+end}
 
 --[[
     Client-side effect countdown
@@ -275,18 +275,18 @@ end
 --]]
 
 function ulx.rtd(calling_ply)
-    if (!IsValid(calling_ply)) then return end
+    if not IsValid(calling_ply) then return end
 
-    if (calling_ply.TRTD_Cooldown == nil) then
+    if calling_ply.TRTD_Cooldown == nil then
         calling_ply.TRTD_Cooldown = 0
     end
 
-    if (calling_ply.TRTD_Cooldown-1 > CurTime()) then
+    if calling_ply.TRTD_Cooldown-1 > CurTime() then
         ULib.tsayError(calling_ply, "You have to wait " .. math.Round(calling_ply.TRTD_Cooldown - CurTime()) .. " more seconds before you can Roll the Dice again.")
         return
     end
 
-    if (!calling_ply:Alive()) then
+    if not calling_ply:Alive() then
         ULib.tsayError(calling_ply, "You can't Roll the Dice when you're dead.")
         return
     end
@@ -299,7 +299,7 @@ function ulx.rtd(calling_ply)
 
     effect.enable(calling_ply)
 
-    if (effect.disable ~= nil && effect.duration ~= nil) then
+    if effect.disable ~= nil and effect.duration ~= nil then
         -- Trigger the client-side countdown
         net.Start("TRTD_EffectCountdown")
         net.WriteInt(effect.duration, 6) -- Bit count of 6 allows any int between 0 and 63
@@ -322,7 +322,7 @@ function ulx.rtd(calling_ply)
 
         -- Disable the effect
         timer.Create(timerId, effect.duration, 1, function()
-            if (!IsValid(calling_ply)) then return end
+            if not IsValid(calling_ply) then return end
             effect.disable(calling_ply)
             hook.Remove("PlayerDeath", hookId)
         end)
