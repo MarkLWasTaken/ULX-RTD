@@ -221,6 +221,7 @@ if engine.ActiveGamemode() == "sandbox" then
 end
 
 TRTD.AddEffect{name="respawn", enable=function(ply)
+    ply:StripWeapons()
     ply:Spawn()
     hook.Call("PlayerLoadout", GAMEMODE, ply)
 end}
