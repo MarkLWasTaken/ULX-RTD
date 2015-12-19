@@ -207,7 +207,10 @@ TRTD.AddEffect{name="nothing", enable=function(ply)
 end}
 
 TRTD.AddEffect{name="corporal punishment", enable=function(ply)
-    ULib.slap(ply, math.random(16), math.random(30))
+    timer.Create("trtd_slap_" .. ply:EntIndex(), 0.5, math.Clamp(math.random(18), 5, 15), function()
+        if not IsValid(ply) then return end
+        ULib.slap(ply, math.random(8))
+    end)
 end}
 
 if engine.ActiveGamemode() == "sandbox" then
